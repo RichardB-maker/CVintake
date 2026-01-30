@@ -4,7 +4,7 @@ from audio_recorder_streamlit import audio_recorder
 import io
 
 # 1. Instellingen - Plak hier je API key uit Google AI Studio
-API_KEY = "JOUW_GEMINI_API_KEY_HIER"
+API_KEY = "AIzaSyAgG36HsdKnA2-loH5f7D-8L97LpCgOzLw"
 genai.configure(api_key=API_KEY)
 
 st.set_page_config(page_title="AI CV Coach", page_icon="🎤")
