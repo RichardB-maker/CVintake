@@ -2,16 +2,20 @@ import streamlit as st
 import google.generativeai as genai
 from streamlit_mic_recorder import mic_recorder
 
-# --- 1. CONFIGURATIE ---
-# Zorg dat je de sleutel in Streamlit Secrets hebt gezet als GEMINI_API_KEY
-try:
+# --- 1. CONFIGURATIE (DE VEILIGE METHODE) ---
+# Stap A: Probeer de sleutel uit de 'Secrets' van Streamlit te halen (voor online gebruik)
+if "GEMINI_API_KEY" in st.secrets:
     API_KEY = st.secrets["AIzaSyBj_7CBm7wm_fPFeUXEm6u5x9YRARv9t0A"]
-    genai.configure(api_key=API_KEY)
-except:
-    st.error("Sleutel niet gevonden in Secrets!")
-    st.stop()
+else:
+    # Stap B: Als de secret niet bestaat (lokaal testen), gebruik dan deze variabele
+    # LET OP: Plak hier je NIEUWE sleutel als je lokaal test, 
+    # maar gebruik liever de Secrets in de Streamlit Cloud console.
+    API_KEY = "AIzaSyBj_7CBm7wm_fPFeUXEm6u5x9YRARv9t0A"
 
-# We gebruiken 1.5-flash, die heeft ruimere limieten dan Pro
+# Configureer de AI met de sleutel
+genai.configure(api_key=API_KEY)
+
+# Gebruik Gemini 1.5 Flash (deze is het meest stabiel voor de gratis versie)
 MODEL_NAME = 'gemini-1.5-flash'
 
 SYSTEM_PROMPT = """
