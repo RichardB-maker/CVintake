@@ -3,7 +3,7 @@ import google.generativeai as genai
 from streamlit_mic_recorder import mic_recorder
 
 # --- 1. CONFIGURATIE ---
-API_KEY = "AIzaSyAgG36HsdKnA2-loH5f7D-8L97LpCgOzLw"
+API_KEY = "AIzaSyBj_7CBm7wm_fPFeUXEm6u5x9YRARv9t0A"
 # Gebruik transport='rest' om v1beta/gRPC problemen te voorkomen
 genai.configure(api_key=API_KEY, transport='rest')
 
