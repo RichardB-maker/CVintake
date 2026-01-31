@@ -1,7 +1,7 @@
 
 # --- 1. VEILIGE CONFIGURATIE ---
 # We checken eerst of de secrets bestaan, anders gebruiken we een lege tekst
-GEMINI_API_KEY = "AIzaSyBj_7CBm7wm_fPFeUXEm6u5x9YRARv9t0A"
+GEMINI_KEY = "AIzaSyBj_7CBm7wm_fPFeUXEm6u5x9YRARv9t0A"
 ELEVEN_KEY ="sk_722508e8af2591b1e34e0b36ca75b0518e8266c20964b162"
 
 if not GEMINI_KEY or not ELEVEN_KEY:
