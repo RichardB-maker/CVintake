@@ -5,7 +5,7 @@ from streamlit_mic_recorder import mic_recorder
 # --- 1. CONFIGURATIE ---
 # Zorg dat je de sleutel in Streamlit Secrets hebt gezet als GEMINI_API_KEY
 try:
-    API_KEY = st.secrets["GEMINI_API_KEY"]
+    API_KEY = st.secrets["AIzaSyBj_7CBm7wm_fPFeUXEm6u5x9YRARv9t0A"]
     genai.configure(api_key=API_KEY)
 except:
     st.error("Sleutel niet gevonden in Secrets!")
