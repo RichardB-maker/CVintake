@@ -1,3 +1,8 @@
+import streamlit as st
+import google.generativeai as genai  # <--- DIT IS DE BELANGRIJKSTE REGEL
+from streamlit_mic_recorder import mic_recorder
+import requests
+import base64
 
 # --- 1. VEILIGE CONFIGURATIE ---
 # We checken eerst of de secrets bestaan, anders gebruiken we een lege tekst
