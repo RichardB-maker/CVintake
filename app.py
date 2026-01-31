@@ -3,9 +3,10 @@ from audio_recorder_streamlit import audio_recorder
 import google.generativeai as genai
 
 # Je geheime sleutel ophalen uit de instellingen
-api_key = st.secrets["AIzaSyAgG36HsdKnA2-loH5f7D-8L97LpCgOzLw"]
-genai.configure(api_key=api_key)
-
+# api_key = st.secrets["AIzaSyAgG36HsdKnA2-loH5f7D-8L97LpCgOzLw"]
+# genai.configure(api_key=api_key)
+# Vervang die hele st.secrets regel door dit:
+genai.configure(api_key="AIzaSyAgG36HsdKnA2-loH5f7D-8L97LpCgOzLw")
 st.title("Sprekend CV 🎙️")
 
 st.write("Klik op de microfoon en vertel iets over jezelf.")
