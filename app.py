@@ -1,10 +1,15 @@
-# --- 1. CONFIGURATIE ---
-# Vul deze in bij Streamlit 'Secrets' of vervang ze hier tijdelijk voor een lokale test
-GEMINI_KEY = st.secrets.get("GEMINI_API_KEY", "AIzaSyBj_7CBm7wm_fPFeUXEm6u5x9YRARv9t0A")
-ELEVEN_KEY = st.secrets.get("ELEVEN_API_KEY", "sk_722508e8af2591b1e34e0b36ca75b0518e8266c20964b162")
-VOICE_ID = "pNInz6obpgDQGcFmaJgB" # Een warme, Nederlandse stem (bijv. 'Adam' of 'Marcus')
+
+# --- 1. VEILIGE CONFIGURATIE ---
+# We checken eerst of de secrets bestaan, anders gebruiken we een lege tekst
+GEMINI_KEY = st.secrets.get("AIzaSyBj_7CBm7wm_fPFeUXEm6u5x9YRARv9t0A", "")
+ELEVEN_KEY = st.secrets.get("sk_722508e8af2591b1e34e0b36ca75b0518e8266c20964b162", "")
+
+if not GEMINI_KEY or not ELEVEN_KEY:
+    st.error("⚠️ API-sleutels ontbreken! Ga naar 'Settings' > 'Secrets' in Streamlit Cloud en voeg ze toe.")
+    st.stop()
 
 genai.configure(api_key=GEMINI_KEY)
+
 
 SYSTEM_PROMPT = """
 Jij bent een warme HR-interviewer. Voer een natuurlijk gesprek. 
