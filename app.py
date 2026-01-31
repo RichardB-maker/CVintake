@@ -1,35 +1,57 @@
 import streamlit as st
-from audio_recorder_streamlit import audio_recorder
 import google.generativeai as genai
 
-# Je geheime sleutel ophalen uit de instellingen
-# api_key = st.secrets["AIzaSyAgG36HsdKnA2-loH5f7D-8L97LpCgOzLw"]
-# genai.configure(api_key=api_key)
-# Vervang die hele st.secrets regel door dit:
-genai.configure(api_key="AIzaSyAgG36HsdKnA2-loH5f7D-8L97LpCgOzLw")
-st.title("Sprekend CV 🎙️")
+# 1. Instellingen & API Key
+# Gebruik st.secrets op Streamlit Cloud of plak je key hier direct voor een lokale test
+API_KEY = "AIzaSyAgG36HsdKnA2-loH5f7D-8L97LpCgOzLw" 
+genai.configure(api_key=API_KEY)
 
-st.write("Klik op de microfoon en vertel iets over jezelf.")
+# 2. De Instructies voor de AI (System Prompt)
+SYSTEM_PROMPT = """
+Jij bent een empathische CV-coach voor laaggeletterden. 
+Jouw doel is om via een gesprek alle info voor een CV te verzamelen.
+Regels:
+- Gebruik korte zinnen en simpele woorden (geen moeilijke woorden).
+- Stel altijd maar één vraag tegelijk.
+- Wees heel positief en bemoedigend.
+- Vraag naar: Naam, wat voor werk iemand zoekt, werkervaring en sterke punten.
+- Zodra je alles weet, zeg je: 'Bedankt! Ik ga nu je CV maken.' en toon je een simpel overzicht.
+"""
 
-# Geluid opnemen
-audio_bytes = audio_recorder(text="Klik en praat", icon_size="2x")
+st.set_page_config(page_title="AI CV Hulp", page_icon="🎤")
+st.title("🎤 Jouw CV Coach")
+st.write("Hoi! Ik help je om een mooi CV te maken door gewoon even te kletsen.")
 
-if audio_bytes:
-    # We laten de gebruiker weten dat we luisteren
-    st.audio(audio_bytes, format="audio/wav")
-    
-    # Voor een stabiel prototype gebruiken we Gemini's tekstkracht.
-    # OPMERKING: Directe audio-bitstream upload vereist vaak een tijdelijk bestand.
-    # Laten we het voor nu simpel en werkend houden via tekst:
-    
-    model = genai.GenerativeModel('gemini-1.5-flash')
-    
-    # We vragen Gemini om te reageren op de input (tekst of gesimuleerde audio)
-    # Als je echt audio wilt transcriberen, gebruik je de Whisper integratie.
-    # Voor nu herstellen we de chat-functie:
-    
-    with st.spinner("Ik ben even aan het luisteren en nadenken..."):
-        # Hier sturen we de prompt als tekst. 
-        # Zorg dat de gebruiker ook in de tekstbalk kan typen voor de zekerheid.
-        response = model.generate_content(f"{SYSTEM_PROMPT} \n De gebruiker heeft iets ingesproken. Reageer vriendelijk.")
-        st.write(response.text)
+# 3. Chat geschiedenis initialiseren
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+    # Startbericht van de AI
+    initial_text = "Hoi! Ik ben je hulpje voor je CV. Om te beginnen: wat is je naam?"
+    st.session_state.messages.append({"role": "assistant", "content": initial_text})
+
+# Chat geschiedenis tonen
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+# 4. Input van de gebruiker
+if prompt := st.chat_input("Typ hier je antwoord..."):
+    # Voeg gebruikersbericht toe aan geschiedenis
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    # 5. Gemini aanroepen met de hele context
+    with st.spinner("Nadenken..."):
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        
+        # We bouwen de context op voor Gemini
+        history_context = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.messages])
+        full_query = f"{SYSTEM_PROMPT}\n\nGeschiedenis van het gesprek:\n{history_context}\n\nCoach:"
+        
+        response = model.generate_content(full_query)
+        
+        # Antwoord tonen en opslaan
+        with st.chat_message("assistant"):
+            st.markdown(response.text)
+            st.session_state.messages.append({"role": "assistant", "content": response.text})
