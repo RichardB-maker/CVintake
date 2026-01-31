@@ -8,8 +8,8 @@ import base64
 
 # --- 1. CONFIGURATIE & SETUP ---
 # Haal de sleutels op uit Streamlit Secrets
-GEMINI_KEY = st.secrets.get("AIzaSyBj_7CBm7wm_fPFeUXEm6u5x9YRARv9t0A", "")
-ELEVEN_KEY = st.secrets.get("sk_722508e8af2591b1e34e0b36ca75b0518e8266c20964b162", "")
+GEMINI_KEY = "AIzaSyBj_7CBm7wm_fPFeUXEm6u5x9YRARv9t0A"
+ELEVEN_KEY = "sk_722508e8af2591b1e34e0b36ca75b0518e8266c20964b162"
 VOICE_ID = "pNInz6obpgDQGcFmaJgB"  # Warme NL stem (Marcus)
 
 if not GEMINI_KEY or not ELEVEN_KEY:
